@@ -1,11 +1,26 @@
 import streamlit as st  #importar libretia streamlit
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sn
+
+
+st.title("Equipo Analej@beth")
+dataframe = pd.DataFrame(
+    np.random.randn(10, 20),
+    columns=('col %d' % i for i in range(20)))
+
+
+st.dataframe(dataframe.style.highlight_max(axis=0))
+#streamlit run app.py
+
+
+st.write("<html><p>Esto es un parrafo</p><html>")
+
 
 st.write("Hello word") #inprimimos en pantalla
 
-# streamlit run app.py para en el navegador
-
-import matplotlib.pyplot as plt
-import numpy as np
+# streamlit run app.py para correr el entorno virtual en el navegador
 
 
 st.write("Here's our first attempt at using data to create a table:")
