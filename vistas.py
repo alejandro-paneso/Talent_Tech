@@ -53,8 +53,21 @@ def vista_produccion():
                 np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
                 columns=['lat', 'lon'])
                 st.map(map_data)
+                make_heatmap()
+                calculate_population_difference()
+            with col[2]:
+                st.write('''
+                        - Inserte links: [U.S. Census Bureau](<https://www.census.gov/data/datasets/time-series/demo/popest/2010s-state-total.html>).
+                        - :orange[**Otro titulo*]: Otra inofmracion util
+                        - :orange[**Titulo util**]: Información util
+                        ''')
+                
+                  
+def make_heatmap():
+        return  st.write("Otro grafico")
 
-
+def calculate_population_difference():
+    st.write("Otro grafico parte 1")
 
 def vista_emisiones():
     st.title("Emisiones de CO2")
