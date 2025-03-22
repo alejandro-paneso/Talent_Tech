@@ -4,17 +4,16 @@ import plotly.express as px
 from streamlit_option_menu import option_menu 
 import numpy as np
 import matplotlib.pyplot as plt
+from graficasProyecto import *
+from vistas import *
+from filtros import *
+from InterfazProyecto import *
 
 from streamlit_dynamic_filters import DynamicFilters
 
-data = {
-    'Nombre': ['Ana', 'Luis', 'Carlos'],
-    'Edad': [23, 34, 45],
-    'Ciudad': ['Madrid', 'Barcelona', 'Valencia']
-}
-
-df = pd.DataFrame(data)
-
+df_produccion = pd.read_csv('/workspaces/Talent_Tech/produccion_limpio.csv')
+df_emisiones = pd.read_csv('/workspaces/Talent_Tech/emisiones_limpio.csv')
+#df_consumo = pd.read_csv('/workspaces/Talent_Tech/consumo_limpio.csv')
 
 def pagina_principal():
     st.title("Pagina principal")
@@ -44,70 +43,37 @@ def vista_consumo():
 
 def vista_produccion():
     with st.container():
-        col = st.columns((1.5, 4.5, 2), gap='medium')
+        col = st.columns((1.5, 4.5, 2), gap='large')
+        with col[0]:
+            display_kpi_card()
+            display_kpi_card()
         with col[1]:
             st.write("Este es el contenedor exterior.")
-            with st.container():
-                st.write("Este es el contenedor interior.")
-                map_data = pd.DataFrame(
-                np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
-                columns=['lat', 'lon'])
-                st.map(map_data)
-                make_heatmap()
-                calculate_population_difference()
-            with col[2]:
-                st.write('''
+            display_kpi_card()
+            make_heatmap()
+            calculate_population_difference()
+        with col[2]:
+            st.write('''
                         - Inserte links: [U.S. Census Bureau](<https://www.census.gov/data/datasets/time-series/demo/popest/2010s-state-total.html>).
                         - :orange[**Otro titulo*]: Otra inofmracion util
                         - :orange[**Titulo util**]: Información util
-                        ''')
-                
-                  
-def make_heatmap():
-        return  st.write("Otro grafico")
+                        ''')                
 
-def calculate_population_difference():
-    st.write("Otro grafico parte 1")
 
-def vista_emisiones():
+def vista_emisiones(df_emisiones):
     st.title("Emisiones de CO2")
     st.write("Bienvenid a emisiones")
     st.write("Usa el menú a la izquierda para navegar por nuestro analisis")
+    with st.container():
+        col = st.columns((1.5, 4.5, 2), gap='large')
+        with col[0]:
+            st.write("Bienvenido a emisiones")
+        with col[1]:
+            grafico_value_por_year(df_emisiones)
+            grafico_suma_value_por_year(df_emisiones)
+            #grafico_suma_value_por_year2(df_emisiones,dynamic_filters,anio_to_filter)
 
 def vista_inferencias():
     st.title("Inferencias")
     st.write("Bienvenido a nuestro proyeto")
     st.write("Usa el menú a la izquierda para navegar por nuestro analisis")
-
-def filtros_laterales(pagina,df):
-    if pagina == "Bienvenido":
-        with st.sidebar:
-            #seccion de filtros
-            st.sidebar.title("Contexto")
-            pagina_menu = option_menu(
-                menu_title="Bienvenido",  #el valor puede ser none
-                options=    ["Motivo 1",
-                "Motivo 2",
-                "Motivo 3",
-                "Motivo 4",
-                "Motivo 5"],
-                default_index=-1, #valor seleccioando por defecto
-                    # icons["house","book","envelope"], #traer nombres de iconos desde boostramp
-                    #menu_icon="cast", #icono del encabezado
-                
-                )
-    else:
-        with st.sidebar:
-            st.sidebar.title("Filtrar")
-            st.write("Apply filters in any order 👇")
-            dynamic_filters = DynamicFilters(df, filters=['region', 'country', 'city', 'district'])
-            dynamic_filters.display_filters(location='sidebar')
-            age_to_filter = st.slider('Age', min_value=0, max_value=100, value=(0, 100))
-            st.sidebar.selectbox("Navegar",
-            ["Bienvenido",
-            "Analisis de consumo",
-            "Analisis de producción",
-            "Emisiones de CO2",
-            "Inferencias"])
-            #dynamic_filters.display_df()
-

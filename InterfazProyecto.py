@@ -5,24 +5,15 @@ import altair as alt
 from streamlit_option_menu import option_menu
 from streamlit_dynamic_filters import dynamic_filters
 from vistas import *
+from graficasProyecto import *
+from filtros import *
 
-data = {
-    'region': ['North America', 'North America', 'Europe', 'Oceania',
-               'North America', 'North America', 'Europe', 'Oceania',
-               'North America', 'North America', 'Europe', 'Oceania'],
-    'country': ['USA', 'Canada', 'UK', 'Australia',
-                'USA', 'Canada', 'UK', 'Australia',
-                'USA', 'Canada', 'UK', 'Australia'],
-    'city': ['New York', 'Toronto', 'London', 'Sydney',
-             'New York', 'Toronto', 'London', 'Sydney',
-             'New York', 'Toronto', 'London', 'Sydney'],
-    'district': ['Manhattan', 'Downtown', 'Westminster', 'CBD',
-                 'Brooklyn', 'Midtown', 'Kensington', 'Circular Quay',
-                 'Queens', 'Uptown', 'Camden', 'Bondi']
-}
+#pip install streamlit pandas plotly
+#pip install streamlit-option-menu
+#pip install streamlit-dynamic-filters
+#streamlit run InterfazProyecto.py
 
-df = pd.DataFrame(data)
-#dynamic_filters = dynamic_filters(df, filters=['region', 'country', 'city', 'district'])
+#df = pd.DataFrame(data)
 
 
 st.set_page_config(
@@ -39,13 +30,6 @@ background-size: cover;
 }
 </style>
 '''
-
-
-#pip install streamlit pandas plotly
-#pip install streamlit-option-menu
-#pip install streamlit-dynamic-filters
-#streamlit run interfazProyecto.py
-
 
 #ENCABEZADO 
 header = st.container()
@@ -84,8 +68,9 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
 #llamo la funcion de barra lateral
-filtros_laterales(pagina,df)
+filtros_laterales(pagina) 
 
 if pagina == "Bienvenido":
     pagina_principal()
@@ -94,6 +79,6 @@ elif pagina == "Analisis de consumo":
 elif pagina == "Analisis de Producción":
     vista_produccion()
 elif pagina == "Emisiones de CO2":
-    vista_emisiones()
+    vista_emisiones(df_emisiones)
 elif pagina == "Inferencias":
     vista_inferencias()
