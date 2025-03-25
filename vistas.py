@@ -1,79 +1,68 @@
 import streamlit as st
-import pandas as pd
 import plotly.express as px
-from streamlit_option_menu import option_menu 
-import numpy as np
-import matplotlib.pyplot as plt
-from graficasProyecto import *
-from vistas import *
-from filtros import *
-from InterfazProyecto import *
+from filtros import filtros_laterales, aplicar_filtros
+from graficasEmisiones import *
 
-from streamlit_dynamic_filters import DynamicFilters
-
-df_produccion = pd.read_csv('/workspaces/Talent_Tech/produccion_limpio.csv')
-df_emisiones = pd.read_csv('/workspaces/Talent_Tech/emisiones_limpio.csv')
-#df_consumo = pd.read_csv('/workspaces/Talent_Tech/consumo_limpio.csv')
-
+# Página principal
 def pagina_principal():
-    st.title("Pagina principal")
-    st.write("Bienvenido a nuestro proyeto")
+    st.title("Página principal")
+    st.write("Bienvenido a nuestro proyecto")
+
     with st.container():
         st.write("Este es el contenedor exterior.")
         with st.container():
             st.write("Este es el contenedor interior.")
 
-
+# Vista de análisis de consumo
 def vista_consumo():
-    st.title("Analisis de consumo")
-    st.write("Bienvenido a nuestro proyeto")
-        #permitir que el archivo pueda ser ingresado por el usuario, defino la key 2 para poder llamar a ese archivo sin confundirnos entre archivos
-        #archivo_cargado_consumo = st.file.uploader("Elige el archivo CSV de producción", type="csv")
-        #permitamos que selecciones los ejes de un grafico
-    """if archivo_cargado_consumo is not None:
-        df_consumo =pd.read_csv(archivo_cargado_consumo)
-        st.write("Elije la columna para el eje X:")
-        eje_x = st.selectbox("Eje X",df_consumo.columns)
-        eje_y = st.selectbox("Eje Y",df_consumo.columns)
+    st.title("Análisis de consumo")
+    st.write("Bienvenido a nuestro proyecto")
+    filtros_laterales("Análisis de consumo")
 
-        if st.button("Crear gráfico"):
-            fig = px.bar(df_consumo, x=eje_x, y=eje_y, title=f"{eje_y} por {eje_x}")
-            st.plotly_chart(fig)
-    """
-
+# Vista de producción
 def vista_produccion():
+    st.title("Análisis de Producción")
+    
+    df_produccion, filtros, year_range = filtros_laterales("Análisis de Producción")
+    df_filtrado = aplicar_filtros(df_produccion, filtros, year_range)
+
     with st.container():
         col = st.columns((1.5, 4.5, 2), gap='large')
         with col[0]:
-            display_kpi_card()
-            display_kpi_card()
+            mostrar_kpi_total_emisiones(df_filtrado)
         with col[1]:
             st.write("Este es el contenedor exterior.")
-            display_kpi_card()
-            make_heatmap()
-            calculate_population_difference()
+            grafico_value_por_year(df_filtrado)
+            grafico_barras_emisiones(df_filtrado)
         with col[2]:
             st.write('''
-                        - Inserte links: [U.S. Census Bureau](<https://www.census.gov/data/datasets/time-series/demo/popest/2010s-state-total.html>).
-                        - :orange[**Otro titulo*]: Otra inofmracion util
-                        - :orange[**Titulo util**]: Información util
-                        ''')                
+                - Inserte links: [U.S. Census Bureau](<https://www.census.gov/data/datasets/time-series/demo/popest/2010s-state-total.html>).
+                - :orange[**Otro título**]: Otra información útil
+                - :orange[**Título útil**]: Información útil
+            ''')
 
-
-def vista_emisiones(df_emisiones):
+# Vista de emisiones de CO2
+def vista_emisiones():
     st.title("Emisiones de CO2")
-    st.write("Bienvenid a emisiones")
-    st.write("Usa el menú a la izquierda para navegar por nuestro analisis")
-    with st.container():
-        col = st.columns((1.5, 4.5, 2), gap='large')
-        with col[0]:
-            st.write("Bienvenido a emisiones")
-        with col[1]:
-            grafico_value_por_year(df_emisiones)
-            grafico_suma_value_por_year(df_emisiones)
-            #grafico_suma_value_por_year2(df_emisiones,dynamic_filters,anio_to_filter)
 
+    df_emisiones, filtros, year_range = filtros_laterales("Emisiones de CO2")  
+    df_filtrado = aplicar_filtros(df_emisiones, filtros, year_range)  
+
+    with st.container():
+        col = st.columns((1.5, 4, 2.5), gap='large')
+        with col[0]:
+            mostrar_kpi_total_emisiones(df_filtrado)
+        with col[1]:
+            grafico_value_por_year(df_filtrado)
+        with col[2]:
+            grafico_barras_emisiones(df_filtrado)
+
+# Vista de inferencias
 def vista_inferencias():
     st.title("Inferencias")
-    st.write("Bienvenido a nuestro proyeto")
-    st.write("Usa el menú a la izquierda para navegar por nuestro analisis")
+    st.write("Bienvenido a nuestro proyecto")
+
+    df_inferencias, filtros, year_range = filtros_laterales("Inferencias")
+    df_filtrado = aplicar_filtros(df_inferencias, filtros, year_range)
+
+    st.write("Usa el menú a la izquierda para navegar por nuestro análisis")

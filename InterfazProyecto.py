@@ -1,20 +1,4 @@
 import streamlit as st
-import pandas as pd
-import plotly.express as px
-import altair as alt
-from streamlit_option_menu import option_menu
-from streamlit_dynamic_filters import dynamic_filters
-from vistas import *
-from graficasProyecto import *
-from filtros import *
-
-#pip install streamlit pandas plotly
-#pip install streamlit-option-menu
-#pip install streamlit-dynamic-filters
-#streamlit run InterfazProyecto.py
-
-#df = pd.DataFrame(data)
-
 
 st.set_page_config(
     page_title="Proyecto Final Talento Tech",
@@ -22,20 +6,45 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded")
 
-page_bg_img = '''
-<style>
-body {
-background-image: url("https://images.unsplash.com/photo-1542281286-9e0a16bb7366");
-background-size: cover;
-}
-</style>
-'''
+import pandas as pd
+import plotly.express as px
+import altair as alt
+from streamlit_option_menu import option_menu
+from streamlit_dynamic_filters import dynamic_filters
+from vistas import *
+from graficasEmisiones import *
+from filtros import *
 
-#ENCABEZADO 
+#pip install streamlit pandas plotly
+#pip install streamlit-option-menu
+#pip install streamlit-dynamic-filters
+#streamlit run InterfazProyecto.py
+#df = pd.DataFrame(data)
+
+
+
+df_produccion = pd.read_csv('/workspaces/Talent_Tech/produccion_limpio.csv')
+df_emisiones = pd.read_csv('/workspaces/Talent_Tech/emisiones_limpio.csv')
+
+st.markdown(
+    """
+    <style>
+        /* Configuración de la imagen de fondo */
+        .stApp {
+            background-image: url("https://images.unsplash.com/photo-1542281286-9e0a16bb7366");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+#page_bg_img = '''
+#<style> body {background-image: url("https://images.unsplash.com/photo-1542281286-9e0a16bb7366"); background-size: cover;}</style>'''
+
 header = st.container()
-header.title("Proyecto Final Talento Tech")
-header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
-### Custom CSS for the sticky header
 pagina = option_menu(
         menu_title=None,  #el valor puede ser none
         orientation = "horizontal",
@@ -47,6 +56,12 @@ pagina = option_menu(
         icons = ["house","bi-bar-chart-steps","bi-bar-chart","bi-exclamation-circle-fill","bi-question-circle"],
         styles={"nav-link": {"font-size": "14px", "text-align": "center", "margin":"5px", "--hover-color": "gray"}}
         )
+#ENCABEZADO 
+
+header.title("Proyecto Final Talento Tech "+pagina)
+header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
+### Custom CSS for the sticky header
+
 
 st.markdown(
     """
@@ -79,6 +94,6 @@ elif pagina == "Analisis de consumo":
 elif pagina == "Analisis de Producción":
     vista_produccion()
 elif pagina == "Emisiones de CO2":
-    vista_emisiones(df_emisiones)
+    vista_emisiones()
 elif pagina == "Inferencias":
     vista_inferencias()
