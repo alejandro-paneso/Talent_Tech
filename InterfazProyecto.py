@@ -14,6 +14,9 @@ from streamlit_dynamic_filters import dynamic_filters
 from vistas import *
 from graficasEmisiones import *
 from filtros import *
+import matplotlib.pyplot as plt
+
+
 
 #pip install streamlit pandas plotly
 #pip install streamlit-option-menu
@@ -23,15 +26,14 @@ from filtros import *
 
 
 
-df_produccion = pd.read_csv('/workspaces/Talent_Tech/produccion_limpio.csv')
-df_emisiones = pd.read_csv('/workspaces/Talent_Tech/emisiones_limpio.csv')
+
 
 st.markdown(
     """
     <style>
         /* Configuración de la imagen de fondo */
         .stApp {
-            background-image: url("https://images.unsplash.com/photo-1542281286-9e0a16bb7366");
+            background-image: url("htps://images.unsplash.com/photo-1542281286-9e0a16bb7366");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
